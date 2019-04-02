@@ -4,7 +4,6 @@ using namespace std;
 
 int map[51][51];
 int m,n;
-int visit[51][51];
 int a[4] = {0,1,0,-1};
 int b[4] = {1,0,-1,0};
 queue< pair<int, int> > que;
