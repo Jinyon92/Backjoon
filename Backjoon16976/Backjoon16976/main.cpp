@@ -1,77 +1,90 @@
 #include<iostream>
 #include<vector>
+#include<algorithm>
 using namespace std;
 
-int arr[100001];
+int parent[100001];
+int level[100001];
+int ans[100001];
+int answer[100001];
+int n;
+
+int find(int u)
+{
+    if(u == parent[u]) return u;
+    return find(parent[u]);
+}
+
+void update(int u, int v, int cnt){
+    parent[u] = v;
+    ans[u] = cnt;
+    for(int i=1; i<=n; i++){
+        if(parent[i] == u){
+            ans[i] = cnt;
+            parent[i] = v;
+        }
+    }
+}
+
+void merge(int u, int v, int cnt)
+{
+    u = find(u);
+    v = find(v);
+    if(u == v) return;
+    if(level[u] > level[v]) swap(u, v);
+    update(u,v,cnt);
+    if(level[u] == level[v])
+        ++level[v];
+}
 
 int main()
 {
-    ios_base :: sync_with_stdio(false);
+    ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
     
-    int n,m,q;
+    int m,q;
     cin>>n>>m>>q;
-    vector<int> game(m+1, 0);
-    vector<int> store(n);
-    for(int i=1; i<=n; i++)
-    {
-        int num;
-        cin>>num;
-        game[num]++;
-        store[i] = num;
+    vector< vector<int> > team(m+1);
+    int val;
+    for(int i=1; i<=n; i++){
+        parent[i] = i;
+        level[i] = 1;
+        cin>>val;
+        team[val].push_back(i);
     }
-    for(int i=1; i<=m; i++)
-    {
-        if(game[i] == 1)
-            game[i] = 0;
+    int start,end;
+    for(int i=1; i<=q; i++){
+        cin>>start>>end;
+        merge(start, end, i);
     }
-    int idx = 0;
-    for(int i=0; i<q*2; i++)
-    {
-        int start;
-        bool isInput = true;
-        cin>>start;
-        int j=0;
-        while(arr[j])
-        {
-            if(arr[j] == start)
-            {
-                isInput = false;
+    bool chk = true;
+    for(int i=1; i<=m; i++){
+        int key = parent[team[i][0]];
+        answer[i] = ans[team[i][0]];
+        for(int j=1; j<team[i].size(); j++){
+            if(key != parent[team[i][j]]){
+                chk = false;
                 break;
             }
-            j++;
+            answer[i] = max(answer[i],ans[team[i][j]]);
         }
-        if(isInput)
-        {
-            arr[idx] = start;
-            idx++;
+        if(!chk){
+            break;
         }
     }
-    vector<int> ans(m+1);
-    for(int i=0; i<n; i++)
-    {
-        int point = arr[i];
-        game[store[point]] --;
-        if(game[store[point]] == 0)
-        {
-            ans[store[point]] = i;
-        }
-        if(game[store[point]] == -1)
-        {
-            ans[store[point]] = 0;
+    for(int i=1; i<=m; i++){
+        if(team[i].size() == 1){
+            answer[i] = 0;
         }
     }
-    for(int i=1; i<=m; i++)
-    {
-        if(game[i] > 0)
+    if(chk){
+        for(int i=1; i<=m; i++)
         {
-            ans[i] = -1;
+            cout<<answer[i]<<"\n";
         }
-    }
-    for(int i=1; i<=m; i++)
-    {
-        cout<<ans[i]<<"\n";
+    }else{
+        cout<<-1;
     }
     return 0;
 }
