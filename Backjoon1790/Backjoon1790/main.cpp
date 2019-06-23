@@ -3,28 +3,28 @@ using namespace std;
 
 int main()
 {
-    long long n,k;
+    int n,k;
     cin>>n>>k;
-    long long totalnum, numcount, numlength, tenten, ans, calK;
-    numcount = 9; numlength = 1; tenten = 1; totalnum = 0;
-    calK = k;
-    while(calK > numcount * numlength){
-        totalnum += numcount;
-        calK -= numcount * numlength;
+    long long searchNum, numcount, numlength, ans, tenten;
+    searchNum = 0; numcount = 9; numlength = 1; ans = 0; tenten = 1;
+    int restK = k;
+    while(restK > numcount * numlength){
+        searchNum += numcount;
+        restK -= numcount * numlength;
         numcount *= 10;
         numlength++;
     }
-    totalnum += (calK-1)/numlength + 1;
-    if(totalnum > n){
+    searchNum += (restK-1)/numlength + 1;
+    if(searchNum > n){
         ans = -1;
     }else{
-        long long tmp = (calK-1)%numlength + 1;
-        for(int i=0; i<numlength - 1; i++){
+        long long tmp = (restK-1)%numlength + 1;
+        for(int i=0; i<numlength-1; i++){
             tenten *= 10;
         }
         for(int i=0; i<tmp; i++){
-            ans = totalnum / tenten;
-            totalnum %= tenten;
+            ans = searchNum / tenten;
+            searchNum %= tenten;
             tenten /= 10;
         }
     }
