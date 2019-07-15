@@ -2,40 +2,33 @@
 #include<algorithm>
 using namespace std;
 
-int dp[16];
 int t[16];
 int p[16];
+int dp[16];
 
 int main()
 {
-    int n;
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    
+    int n,ans = 0;
     cin>>n;
-    int time, pay;
-    for(int i=1; i<=n; i++)
-    {
-        cin>>time>>pay;
-        t[i] = time;
-        p[i] = pay;
+    for(int i=1; i<=n; i++){
+        cin>>t[i]>>p[i];
         dp[i] = p[i];
     }
-    for(int i=2; i<=n; i++)
-    {
-        for(int j=1; j<=i; j++)
-        {
+    for(int i=2; i<=n; i++){
+        for(int j=i-1; j>0; j--){
             if(i-j >= t[j])
-            {
                 dp[i] = max(dp[i], dp[j] + p[i]);
-            }
         }
     }
-    int ans = 0;
-    for(int i=1; i<=n; i++)
-    {
-        if(i+t[i] <= n+1)
-        {
-            ans = max(ans, dp[i]);
+    for(int i=1; i<=n; i++){
+        if(i+t[i] <= n+1){
+            ans = max(ans,dp[i]);
         }
     }
-    printf("%d", ans);
+    cout<<ans;
     return 0;
 }
