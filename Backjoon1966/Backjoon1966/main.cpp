@@ -8,7 +8,6 @@ int main()
     cin>>T;
     int n,m;
     vector<int> v;
-    vector<int> ans;
     for(int test_case = 1; test_case <=T; test_case++){
         cin>>n>>m;
         int num, idx = m; int ans = 0;
@@ -44,4 +43,5 @@ int main()
         }
         v.clear();
     }
+    return 0;
 }
